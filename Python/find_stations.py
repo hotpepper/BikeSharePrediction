@@ -5,8 +5,7 @@ def get_stations():
     # Open a cursor to perform database operations
     cur = conn.cursor()
 
-    # Pass data to fill a query placeholders and let Psycopg perform
-    # the correct conversion (no more SQL injections!)
+    
     cur.execute("""select distinct "id", "stationName", latitude, longitude
 from rawcitibike
 order by id""")
