@@ -22,12 +22,15 @@ stations=get_stations()
 
 def get_best3(stations):
        
-    st_id=int(raw_input('What Station # do you want? \n'))
+    st_id=int(raw_input('What Station # do you want? \n'))#place holder for testing 
+    #get station from map
     print stations[st_id]
     h= int(raw_input('What time do you expect to arrive (hours 24h)?\n'))
 
     conn = psycopg2.connect("dbname=CitiBike user=postgres password = ''")
     cur = conn.cursor()
+    #change query to get all stations within x distance geo query
+    #then sort based on availibility
     cur.execute("""select station2 as Station_ID, st_name2 as Name, hh as Hour, avg_Docks, (avg_Docks/"totalDocks")*100 as pct_empty, distance
 
     from 
