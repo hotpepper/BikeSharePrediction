@@ -1,3 +1,7 @@
+#this only needs to be run when statiions have changed
+
+
+
 import csv, os, psycopg2
 
 desk = r'C:\Users\'
