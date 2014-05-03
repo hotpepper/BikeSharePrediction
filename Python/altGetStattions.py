@@ -6,7 +6,7 @@ class get(object):
     def __init__(self):
         self.lat=0.0 #passed from map
         self.long=0.0#passed from map
-        self.cnxn = psycopg2.connect("dbname=CitiBike user=postgres password = 'hosts464'")
+        self.cnxn = psycopg2.connect("dbname=CitiBike user=postgres password = ''")
         self.results =[]
         ids=''
         
