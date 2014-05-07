@@ -1,6 +1,18 @@
 
 ##alternative work flow
 import psycopg2
+from datetime import datetime
+
+class userInput(object):
+    def __str__(self):
+        return '''gets user selcted input from map / web input'''
+    def __init__(self):
+        self.lat=0.0 #passed from map
+        self.long=0.0#passed from map
+        self.OroD = 0 #origin (-1)/destination (1) / NA (0)
+        self.time = datetime.now() #time used for querying -  defaults to current
+
+        
 
 class get(object):
     def __init__(self):
