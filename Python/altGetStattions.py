@@ -9,20 +9,31 @@ class userInput(object):
     def __init__(self):
         self.lat=0.0 #passed from map
         self.long=0.0#passed from map
-        self.OroD = 0 #origin (-1)/destination (1) / NA (0)
+        self.OorD = 0 #origin (-1)/destination (1) / NA (0)
         self.time = datetime.now() #time used for querying -  defaults to current
+        self.dow='FRI'
+        self.hh=8
+        self.fifteen=0
+    def hourAdjustment(self):
+        if self.time.minute>53: self.hh=self.hh+1
 
-        
+    def dateParse(self):
+        m=int(self.time.minute)
+        if m <8: self.fifteen=0
+        elif m<24: self.fifteen=15
+        elif m<38: self.fifteen=30
+        elif m<53: self.fifteen=45
+        else: self.fifteen=0
+        hourAdjustment()
+
 
 class get(object):
     def __init__(self):
-        self.lat=0.0 #passed from map
-        self.long=0.0#passed from map
         self.cnxn = psycopg2.connect("dbname=CitiBike user=postgres password = ''")
         self.results =[]
         ids=''
         
-    def nearby(self, dist):
+    def nearby(self, qry, dist=0.01):
         #connect to db - pass this query
         cur = self.cnxn.cursor()
         SQL = """select *
@@ -45,9 +56,6 @@ class bestBet(object):
     def __init__(self):
         self.OroD = 0 #origin (-1)/destination (1) / NA (0)
         self.top3={}
-        self.dow='FRI'
-        self.hh=8
-        self.fifteen=0
         self.results ={}
         
         
@@ -76,13 +84,17 @@ class bestBet(object):
 
         
 #testing----------------
+org = userInput()
+org.Oord = -1
+org.time = dattime.now()
+org.lat=-73.99392888
+org.long=40.76727216
+org.dateParse()
 
-get= get()
-best=bestBet()
-get.lat=-73.99392888
-get.long=40.76727216
-get.nearby(0.01)
+Oget= get()
+Oget.nearby(org)
 
-best.best(get.ids,get.cnxn)
+Obest=bestBet()
+Obest.best(get.ids,get.cnxn)
         
 
