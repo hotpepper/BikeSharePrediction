@@ -27,7 +27,10 @@ class userInput(object):
         hourAdjustment()
 
 
-class get(object):
+class get(object): 
+    def __str__(self):
+        return '''queries DB for all stations within [distance] of desired coordinates'''
+        
     def __init__(self):
         self.cnxn = psycopg2.connect("dbname=CitiBike user=postgres password = ''")
         self.results =[]
@@ -53,11 +56,13 @@ class get(object):
         self.ids="("+q[1:-1]+")"
 
 class bestBet(object):
+    def __str__(self):
+        return '''Queries DB for ordered by docks or bikes, within search radius. 
+                Has Top3 attribute to store the best 3 locations (distance ad bikes/docks.'''
+                
     def __init__(self):
-        self.OroD = 0 #origin (-1)/destination (1) / NA (0)
         self.top3={}
         self.results ={}
-        
         
     def query(self, ids, cnxn):
         cur = cnxn.cursor()
@@ -86,15 +91,15 @@ class bestBet(object):
 #testing----------------
 org = userInput()
 org.Oord = -1
-org.time = dattime.now()
-org.lat=-73.99392888
-org.long=40.76727216
+org.time = dattime.now() #from Map
+org.lat=-73.99392888 #from Map
+org.long=40.76727216 #from Map
 org.dateParse()
 
-Oget= get()
-Oget.nearby(org)
+Oget= get()  #maybe this should just be called from bestBet()
+Oget.nearby(org) #maybe this should just be called from bestBet()
 
 Obest=bestBet()
-Obest.best(get.ids,get.cnxn)
+Obest.best(Oget.ids,Oget.cnxn)
         
 
