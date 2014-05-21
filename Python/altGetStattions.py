@@ -1,7 +1,7 @@
 
 ##alternative work flow
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class userInput(object):
     def __str__(self):
@@ -11,7 +11,7 @@ class userInput(object):
         self.long=0.0#passed from map
         self.OorD = 0 #origin (-1)/destination (1) / NA (0)
         self.time = datetime.now() #time used for querying -  defaults to current
-        self.dow='FRI'
+        self.dow='FRI'#sample day for testing
         self.hh=8
         self.fifteen=0
     def hourAdjustment(self):
@@ -63,6 +63,9 @@ class bestBet(object):
     def __init__(self):
         self.top3={}
         self.results ={}
+        self.dow=0
+        self.hh=0
+        self.fifteen=0
         
     def query(self, ids, cnxn):
         cur = cnxn.cursor()
@@ -86,12 +89,40 @@ class bestBet(object):
         t3=self.query(ids,cnxn)
         for i in t3:
             self.top3[i[1]]=i[6]
-
+            
+class timeMatrix(object): #------------------add time matrix to DATABASE--------------------------
+    def __str__(self):
+        return '''Using historic data - August 2013 -
+                the average time taken bewtween stations
+                is used to estimate arival time'''
+    def __init__(self):
+        self.Ostation = 0
+        self.Dstation = 0
+        self.TripTime = 0
+        self.ArivalTime=datetime.now()
+    def arival(self,org):
+        self.ArivalTime = org.time + timedelta(0,self.TripTime)
+        
+    def getTime(self, cnxn, org):
+        cur = cnxn.cursor()
+        #need o and d station IDs to get time
+        SQL = """select Time
+                from TimeMatrix as t
+                where t.station_id = %s
+                """
+        data = (str(self.Ostation)+str(self.Dstation))
+        cur.execute(SQL, data)
+        temp = cur.fetchall()
+        for i in temp:
+            self.TripTime = i[0]
+        arival(org)
+            
+        
         
 #testing----------------
 org = userInput()
 org.Oord = -1
-org.time = dattime.now() #from Map
+org.time = datetime.now() #from Map
 org.lat=-73.99392888 #from Map
 org.long=40.76727216 #from Map
 org.dateParse()
@@ -99,7 +130,28 @@ org.dateParse()
 Oget= get()  #maybe this should just be called from bestBet()
 Oget.nearby(org) #maybe this should just be called from bestBet()
 
+
+dest = userInput()
+dest.Oord = 1
+dest.lat=-73.9912551 #from Map 	
+dest.long=40.76019252 #from Map
+
+
+
+#estimate arival time at destingation station
+arival = timeMatrix()
+arival.getTime(Oget.cnxn, org)
+
+#update destination object
+dest.time=arival.ArivalTime
+dest.dateParse()
+Dget= get()
+Dget.nearby(dest)
+
 Obest=bestBet()
-Obest.best(Oget.ids,Oget.cnxn)
+Obest.best(Oget.ids,Dget.cnxn)
+
+Dbest=bestBet()
+Dbest.best(Dget.ids,Dget.cnxn)
         
 
