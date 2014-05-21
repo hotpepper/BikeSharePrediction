@@ -41,3 +41,6 @@ with open(os.path.join(folder,'data.pickle'), 'wb') as handle:
 ##  b = pickle.load(handle)
 
 
+##x=[int(i) for i in b[('376', '217')]]
+##sum(x)/float(len(x))
+##2764.7222222222222
