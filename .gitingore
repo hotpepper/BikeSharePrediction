@@ -1,2 +1,4 @@
 #ignore
 *sql
+*.csv
+*.pickle
