@@ -76,7 +76,7 @@ class bestBet(object):
                 and s.dow = %s
                 and s.hh = %s
                 and s."Fifteen" = %s
-                order by s."Bikes" desc"""
+                order by s."Bikes" desc""" #change this for + and - 10 min from expected arival time
         data = (self.dow, self.hh, self.fifteen)
         cur.execute(SQL, data)
         temp = cur.fetchall()
