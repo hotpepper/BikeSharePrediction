@@ -3,6 +3,8 @@
 import psycopg2
 from datetime import datetime, timedelta
 
+#new test
+
 class userInput(object):
     def __str__(self):
         return '''gets user selcted input from map / web input'''
