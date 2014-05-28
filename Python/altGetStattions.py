@@ -3,7 +3,7 @@
 import psycopg2
 from datetime import datetime, timedelta
 
-#remooved comment
+# comment
 
 class userInput(object):
     def __str__(self):
